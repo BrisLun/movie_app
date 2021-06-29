@@ -1,71 +1,18 @@
-import PropTypes from 'prop-types';
 import React from "react";
-import axios from "axios";
-import Movie from "./movies";
-import "./App.css";
+import { HashRouter, Route } from "react-router-dom";
+import About from "./routes/About";
+import Detail from "./routes/Detail";
+import Home from "./routes/Home";
+import Navigation from "./components/Navigation";
 
 
-// function App() {
-//   return (
-//     <div className="App">
-
-//     </div>
-//   );
-// }
-
-class App extends React.Component {
-  // setting default value
-  state = {
-    isLoading: true,
-    movies: []
-  };
-
-  getMovies = async () => {
-    //wait axios
-    //es6
-    const {
-      data: {
-        data: { movies }
-      }
-    } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by");
-
-    // same with 'this.setState({ movies : movies })'
-    this.setState({ movies, isLoading: false })
-  }
-
-  componentDidMount() {
-    // setTimeout(() => {
-    //   this.setState({ isLoading: false })
-    // }, 6000);
-    this.getMovies()
-  }
-
-  render() {
-    const { isLoading, movies } = this.state;
-    return (
-      <section className="container">
-        {isLoading
-          ? (<div className="loader">
-            <span className="loader_text">Loading...</span>
-          </div>) : (
-            <div className="movies">
-              {movies.map(movie => {
-                return (
-                  <Movie
-                    key={movie.id}
-                    id={movie.id}
-                    year={movie.year}
-                    title={movie.title}
-                    summary={movie.summary}
-                    poster={movie.medium_cover_image}
-                    genres={movie.genres} />
-                )
-              })}
-            </div>
-          )}
-      </section>
-    );
-  }
+function App() {
+  return <HashRouter>
+    <Navigation />
+    <Route path="/" exact={true} component={Home} />
+    <Route path="/about" component={About} />
+    <Route path="/movie/:id" component={Detail} />
+  </HashRouter>
 }
 
 export default App;
